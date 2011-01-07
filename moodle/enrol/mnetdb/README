@@ -1,0 +1,22 @@
+SEE ALSO:
+    * https://launchpad.net/mnet-wsgi (python MNet library with server script to connect to and query a local DB)
+
+This enrolment plugin works very much like the database enrolment plugin, except
+that we query a remote database via MNet. This is as much a proof-of-concept as
+anything else. This requires serious know-how to set up. I'd like to make it
+easier, but for now, if you are seriously interested, seriously capable (of
+writing code), and have questions, feel free to drop me a line (address below).
+
+The overall idea is to use this to integrate in real-time with any arbitrary
+database-backed Student Information System.
+
+Ideally, we would be using SIF or IMS-LIS instead of a hacked-together solution
+like this. But:
+    * many SISes do not support either of those specs
+    * I have a client who needs something implemented sooner rather than later. Specs are good, but shipping code wins...
+
+I hope this gets conversations started about how real-time Moodle+<something>
+integration can be improved.
+
+Matt Oquist <moquist@majen.net>
+Tue Jan  4 21:07:47 EST 2011

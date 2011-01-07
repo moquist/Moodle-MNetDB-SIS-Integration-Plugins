@@ -1,0 +1,9 @@
+firstname,lastname,username,city,password
+Min,Teacher,minteacher,City,password
+Max,Teacher,maxteacher,City,password
+Diligent,Student,diligentstudent,City,password
+Slacker,Student,slackerstudent,City,password
+Albert,Student,albertstudent,City,password
+Emma,Student,emmastudent,City,password
+Ura,Student,urastudent,City,password
+Ima,Student,imastudent,City,password

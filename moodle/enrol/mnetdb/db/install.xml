@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="enrol/mnetdb/db" VERSION="20101009" COMMENT="XMLDB file for Moodle enrol/mnetdb"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="enrol_mnetdb_user" COMMENT="all the users from the mnetdb" NEXT="enrol_mnetdb_course">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="idstring"/>
+        <FIELD NAME="idstring" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Whatever ID we can use from the mnetdb" PREVIOUS="id" NEXT="username"/>
+        <FIELD NAME="username" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="idstring" NEXT="hostid"/>
+        <FIELD NAME="hostid" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="ID of the mnetdb host" PREVIOUS="username" NEXT="isteacher"/>
+        <FIELD NAME="isteacher" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="hostid" NEXT="isstudent"/>
+        <FIELD NAME="isstudent" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="isteacher"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mdl_enrol_mnetdb_user_un_ix" UNIQUE="true" FIELDS="username" NEXT="mdl_enrol_mnetdb_user_idstr_ix"/>
+        <INDEX NAME="mdl_enrol_mnetdb_user_idstr_ix" UNIQUE="true" FIELDS="idstring" PREVIOUS="mdl_enrol_mnetdb_user_un_ix"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="enrol_mnetdb_course" COMMENT="courses from the mnetdb that will map to moodle courses" PREVIOUS="enrol_mnetdb_user" NEXT="enrol_mnetdb_coursesection">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="idstring"/>
+        <FIELD NAME="idstring" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="whatever ID we can use from the mnetdb" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="name from mnetdb" PREVIOUS="idstring" NEXT="hostid"/>
+        <FIELD NAME="hostid" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="ID of the mnetdb host" PREVIOUS="name"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="enrol_mnetdb_coursesection" COMMENT="one section of a course (maps to a group in a moodle course)" PREVIOUS="enrol_mnetdb_course" NEXT="enrol_mnetdb_cs_user">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="idstring"/>
+        <FIELD NAME="idstring" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="whatever ID we can use for this section from the mnetdb" PREVIOUS="id" NEXT="course_idstring"/>
+        <FIELD NAME="course_idstring" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="idstring" NEXT="displayname"/>
+        <FIELD NAME="displayname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="match the display name in the SIS as closely as possible" PREVIOUS="course_idstring" NEXT="hostid"/>
+        <FIELD NAME="hostid" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="ID of the mnetdb host" PREVIOUS="displayname"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mdl_enrol_mnetdb_coursesection_cs_ix" UNIQUE="true" FIELDS="idstring, course_idstring"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="enrol_mnetdb_cs_user" COMMENT="populated by interpreting mnetdb side (for teachers) as well as some input from moodle users (for enrolling students), this relates course sections and users" PREVIOUS="enrol_mnetdb_coursesection" NEXT="enrol_mnetdb_coursesectionmap">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="idstring"/>
+        <FIELD NAME="idstring" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="whatever ID we can use from the mnetdb (when available)" PREVIOUS="id" NEXT="coursesection_idstring"/>
+        <FIELD NAME="coursesection_idstring" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="a course ID from the mnetdb" PREVIOUS="idstring" NEXT="user_idstring"/>
+        <FIELD NAME="user_idstring" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="a user ID from the mnetdb" PREVIOUS="coursesection_idstring" NEXT="hostid"/>
+        <FIELD NAME="hostid" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="ID of the mnetdb host" PREVIOUS="user_idstring" NEXT="isteacher"/>
+        <FIELD NAME="isteacher" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="hostid" NEXT="isstudent"/>
+        <FIELD NAME="isstudent" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="isteacher"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mdl_enrol_mnetdb_coursesectionuser_su_ix" UNIQUE="true" FIELDS="coursesection_idstring, user_idstring"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="enrol_mnetdb_coursesectionmap" COMMENT="map course-sections from mnetdb system into moodle courses" PREVIOUS="enrol_mnetdb_cs_user">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="coursesection_idstring"/>
+        <FIELD NAME="coursesection_idstring" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="mdlcourseid"/>
+        <FIELD NAME="mdlcourseid" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="mdl_course.id" PREVIOUS="coursesection_idstring" NEXT="hostid"/>
+        <FIELD NAME="hostid" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="mdlcourseid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mdl_enrol_mnetdb_coursesectionmap_cm_ix" UNIQUE="true" FIELDS="coursesection_idstring, mdlcourseid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

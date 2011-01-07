@@ -1,0 +1,137 @@
+MNet DB (Enrolment) Plugin Development
+
+The following instructions are intended to be sufficient to get you up and
+running with a very basic demo/test/development setup using the MNet DB
+enrolment plugin and the helper block (which is optional in principle but not
+yet practice).
+
+List of steps that are covered below:
+    1. Install Moodle (duh).
+    2. Enable Moodle Networking.
+    3. Install the mnetdb enrolment plugin in moodle/enrol/.
+    4. Install the mnetdbenrol block in moodle/blocks/.
+    5. Install the mnetdb "activity module" in moodle/mod/.
+    6. Add the MNet DB block to the front page of your moodle, and to all courses as a sticky block.
+    7. Upload the test users in moodle-users.csv to your Moodle.
+    8. Create some Moodle courses and assign Min Teacher and Max Teacher to teach them.
+    9. Create and populate a demo/test "SIS" database that we will access over MNet.
+    10. Configure the MNet server (the "SIS" server side of MNet).
+    11. Start the mnet server side.
+    12. Add your MNet server to your moodle as a peer.
+    * Now see it work!
+    13. Enable the MNet Database enrolment plugin.
+    14. Execute enrol_mnetdb_sync.php under your moodle.
+    15. Play around with the block UI.
+
+###############################################
+1. Install Moodle (duh).
+    This document will assume your moodle is installed at http://localhost/moodle/, so modify instructions below if you install somewhere else!
+2. Enable Moodle Networking.
+    2.1) Log in as admin.
+    2.2) Go to Site Administration -> Networking -> Settings
+    2.3) Select "on" for the "Networking" setting.
+    2.4) Save changes.
+3. Install the mnetdb enrolment plugin in moodle/enrol/.
+4. Install the mnetdbenrol block in moodle/blocks/.
+5. Install the mnetdb "activity module" in moodle/mod/.
+6. Add the MNet DB block to the front page of your moodle, and to all courses as a sticky block.
+7. Upload the test users in moodle-users.csv to your Moodle.
+8. Create some Moodle courses and assign Min Teacher and Max Teacher to teach them.
+
+    These are all completely normal moodley things to do, so I'm not going to
+    tell you more about them here.
+
+    Optional: You might want to enable debugging messages under
+    Site Administration -> Server -> Debugging.
+    
+###############################################
+
+###############################################
+9. Create and populate a demo/test "SIS" database that we will access over MNet.
+    You can use the demo/demo-postgres.sql file to create and populate this database.
+    For our example, we'll assume:
+        * your database is named 'mnetdemodb'
+        * your database can be accessed by the user named 'mnetdemouser'
+        * mnetdemouser's password is 'happymnet'
+
+###############################################
+10. Configure the MNet server (the "SIS" server side of MNet).
+    You can use the copy of mnet-py that should have been included with this
+    download. (The upstream mnet-py project lives at
+    https://launchpad.net/mnet-wsgi and can be gotten like this:
+    $ bzr branch https://code.launchpad.net/~mnet-maintainers/mnet-wsgi/main )
+
+    Here is how to configure the MNet server side:
+    10.1) Initialize your server.
+        You'll want to put your public wwwroot here, but for dev/testing the
+        following will often be sufficient:
+        $ python ShelveApp.py init http://localhost:60080 /
+    10.1) Open config.py with a text editor and configure the relevant settings
+      in the server.py section. In particular, see:
+            * ADDRESS
+            * DB_NAME
+            * DB_USER
+            * DB_PASS
+        For example:
+            ADDRESS = ("localhost", 60080)
+            DB_NAME = 'mnetdemodb'
+            DB_USER = 'mnetdemouser'
+            DB_PASS = 'happymnet'
+    10.2) Still in config.py, uncomment the necessary lines for your database.
+    10.3) Add your test moodle as a peer of your MNet server.
+        $ python ShelveApp.py addpeer http://localhost/moodle/ moodle
+
+###############################################
+11. Start the mnet server side.
+    Execute server.py, perhaps just like this:
+    $ python server.py
+
+    If everything goes well, your terminal should look like this:
+    $ python ./server.py 
+    /home/moquist/mnet-py/mnet.py:30: DeprecationWarning: the sha module is deprecated; use the hashlib module instead
+    import sha
+
+    You'll need to leave this process running -- it is a server! So just keep this terminal alive in the background for now, and remember to start server.py again next time you work with it. (Putting this into production is beyond the scope of this document.)
+
+###############################################
+12. Add your MNet server to your moodle as a peer.
+    12.1) In your moodle, go to Site Administration -> Networking -> Peers
+    12.2) Add a new host
+        * wwwroot: http://localhost:60080
+        * select "MNet DB" from the drop-down menu
+        * Add host!
+    12.3) Your MNet server's key should be displayed in the "Public key" box, and there shouldn't be an errors on the next page. Click 'Save changes'.
+    12.4) Click on the 'Services' tab and check the box next to 'Subscribe' in the 'MNet DB Module' section. Save changes.
+
+###############################################
+* Now see it work!
+13. Enable the MNet Database enrolment plugin.
+    13.1) In your moodle, go to Site Administration -> Courses -> Enrolments.
+    13.2) Check the box next to "Mnet Database".
+    13.3) Save changes.
+
+###############################################
+14. Execute enrol_mnetdb_sync.php under your moodle.
+    In a terminal (remember that server.py needs to be left running, so you'll need a new terminal), execute the enrol_mnetdb_sync.php script like this:
+    $ php moodle/enrol/mnetdb/enrol_mnetdb_sync.php
+
+    In production, you'd want to run this regularly via cron in order to keep your moodle synchronized with your SIS. For testing/demo, it's enough to run it manually as necessary (as long as you don't forget!).
+
+    You can look in your moodle's database now to see if the following tables have data in them:
+        * mdl_enrol_mnetdb_course
+        * mdl_enrol_mnetdb_coursesection
+        * mdl_enrol_mnetdb_coursesectionmap
+        * mdl_enrol_mnetdb_cs_user
+        * mdl_enrol_mnetdb_user
+
+    Here's a single query that will count them all up for you:
+        select 'mdl_enrol_mnetdb_course', count(*) from mdl_enrol_mnetdb_course; select 'mdl_enrol_mnetdb_coursesection', count(*) from mdl_enrol_mnetdb_coursesection; select 'mdl_enrol_mnetdb_coursesectionmap', count(*) from mdl_enrol_mnetdb_coursesectionmap; select 'mdl_enrol_mnetdb_cs_user', count(*) from mdl_enrol_mnetdb_cs_user; select 'mdl_enrol_mnetdb_user', count(*) from mdl_enrol_mnetdb_user;
+
+###############################################
+15. Play around with the block UI.
+    There are basically three things it does.
+    15.1) Log in as Min Teacher and go into one of the Moodle courses she teaches. You can select one or more cohorts from our demo SIS database to auto-enroll in this moodle course.
+    15.2) Continuing as Min Teacher, you can select one or more enrolled cohorts from our demo SIS database to un-auto-enroll in this moodle course.
+    15.3) Continuing as Min Teacher, go to the front page of your moodle. Imagine that you have one or more SIS classes that don't currently have corresponding Moodle courses -- you can click one to request that the Moodle admin create it for you. Do this as Min, and then log into your moodle as admin again. Now you'll see the course creation request there and you can grant or deny it.
+
+
