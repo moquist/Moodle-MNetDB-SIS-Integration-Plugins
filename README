@@ -1,6 +1,9 @@
-SEE ALSO:
-    * https://launchpad.net/mnet-wsgi (python MNet library with server script to connect to and query a local DB)
+If you're not sure yet what you're doing, you should probably just read
+the DEVELOPERS file even if you're not a developer. Until we have some better
+docs created, that file is probably the best explanation of how to set this up,
+and reading it will also give you an idea of what this does.
 
+##############################
 This enrolment plugin works very much like the database enrolment plugin, except
 that we query a remote database via MNet. This is as much a proof-of-concept as
 anything else. This requires serious know-how to set up. I'd like to make it
