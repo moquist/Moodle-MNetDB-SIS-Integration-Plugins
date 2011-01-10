@@ -33,7 +33,8 @@ class enrolment_plugin_mnetdb {
      * of enrolments, and then adjust the local Moodle assignments to match.
      */
     function setup_enrolments(&$user) {
-        error('MNet DB ' . __FUNCTION__ . ' still unimplemented.');
+        #error('MNet DB ' . __FUNCTION__ . ' still unimplemented.');
+        return true;
     }
 
     /**

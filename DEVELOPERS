@@ -18,10 +18,11 @@ List of steps that are covered below:
     10. Configure the MNet server (the "SIS" server side of MNet).
     11. Start the mnet server side.
     12. Add your MNet server to your moodle as a peer.
+    13. Set $CFG->enrol_mnetdb_schema = 'demo'.
     * Now see it work!
-    13. Enable the MNet Database enrolment plugin.
-    14. Execute enrol_mnetdb_sync.php under your moodle.
-    15. Play around with the block UI.
+    14. Enable the MNet Database enrolment plugin.
+    15. Execute enrol_mnetdb_sync.php under your moodle.
+    16. Play around with the block UI.
 
 ###############################################
 1. Install Moodle (duh).
@@ -104,14 +105,18 @@ List of steps that are covered below:
     12.4) Click on the 'Services' tab and check the box next to 'Subscribe' in the 'MNet DB Module' section. Save changes.
 
 ###############################################
-* Now see it work!
-13. Enable the MNet Database enrolment plugin.
-    13.1) In your moodle, go to Site Administration -> Courses -> Enrolments.
-    13.2) Check the box next to "Mnet Database".
-    13.3) Save changes.
+13. Set $CFG->enrol_mnetdb_schema = 'demo'.
+    'Nuff said.
 
 ###############################################
-14. Execute enrol_mnetdb_sync.php under your moodle.
+* Now see it work!
+14. Enable the MNet Database enrolment plugin.
+    14.1) In your moodle, go to Site Administration -> Courses -> Enrolments.
+    14.2) Check the box next to "Mnet Database".
+    14.3) Save changes.
+
+###############################################
+15. Execute enrol_mnetdb_sync.php under your moodle.
     In a terminal (remember that server.py needs to be left running, so you'll need a new terminal), execute the enrol_mnetdb_sync.php script like this:
     $ php moodle/enrol/mnetdb/enrol_mnetdb_sync.php
 
@@ -128,10 +133,10 @@ List of steps that are covered below:
         select 'mdl_enrol_mnetdb_course', count(*) from mdl_enrol_mnetdb_course; select 'mdl_enrol_mnetdb_coursesection', count(*) from mdl_enrol_mnetdb_coursesection; select 'mdl_enrol_mnetdb_coursesectionmap', count(*) from mdl_enrol_mnetdb_coursesectionmap; select 'mdl_enrol_mnetdb_cs_user', count(*) from mdl_enrol_mnetdb_cs_user; select 'mdl_enrol_mnetdb_user', count(*) from mdl_enrol_mnetdb_user;
 
 ###############################################
-15. Play around with the block UI.
+16. Play around with the block UI.
     There are basically three things it does.
-    15.1) Log in as Min Teacher and go into one of the Moodle courses she teaches. You can select one or more cohorts from our demo SIS database to auto-enroll in this moodle course.
-    15.2) Continuing as Min Teacher, you can select one or more enrolled cohorts from our demo SIS database to un-auto-enroll in this moodle course.
-    15.3) Continuing as Min Teacher, go to the front page of your moodle. Imagine that you have one or more SIS classes that don't currently have corresponding Moodle courses -- you can click one to request that the Moodle admin create it for you. Do this as Min, and then log into your moodle as admin again. Now you'll see the course creation request there and you can grant or deny it.
+    16.1) Log in as Min Teacher and go into one of the Moodle courses she teaches. You can select one or more cohorts from our demo SIS database to auto-enroll in this moodle course.
+    16.2) Continuing as Min Teacher, you can select one or more enrolled cohorts from our demo SIS database to un-auto-enroll in this moodle course.
+    16.3) Continuing as Min Teacher, go to the front page of your moodle. Imagine that you have one or more SIS classes that don't currently have corresponding Moodle courses -- you can click one to request that the Moodle admin create it for you. Do this as Min, and then log into your moodle as admin again. Now you'll see the course creation request there and you can grant or deny it.
 
 
