@@ -22,11 +22,23 @@ DB_NAME = "somedatabase"
 DB_USER = "someuser"
 DB_PASS = "somepass"
 
+# If your DB connection is buggy, automatically disconnect and reconnect after this many seconds.
+# Leaving 0 here tells server.py never to disconnect from the DB.
+DB_RECONNECT_SECONDS = 0
 
 # Some databases (e.g., MSSQL) require explicit commits. Only set this to 1 if:
 # 1. You're using server.py to write to the database (!!) and
 # 2. You know you need to commit explicitly.
-COMMIT = 0
+DB_COMMIT = 0
+
+# What should the base name of the server.py logs be?
+LOGFILE_BASE = "c:\\temp\\mnet-server.log"
+# How many server.py logs should be kept in rotation?
+LOGFILE_BACKUPS = 5
+# How big can the logfile get before rotating?
+LOGFILE_MAXBYTES = 1048576
+
+STDERRFILE = "c:\\temp\\mnet-server.err"
 
 
 #### REQUIRED ####
@@ -41,20 +53,23 @@ COMMIT = 0
 # sqlplus> grant create session,select any dictionary,select any table to <username>;
 #
 # Uncomment this for Oracle:
-#import cx_Oracle
-#db = cx_Oracle.connect("%s/%s@%s" % (DB_USER, DB_PASS, DB_NAME))
+# def dbconnect() :
+#   import cx_Oracle
+#   return cx_Oracle.connect("%s/%s@%s" % (DB_USER, DB_PASS, DB_NAME))
 
 #####################
 # DATABASE: MS SQL
 # Uncomment this for mssql:
-#import pymssql
-#db = pymssql.connect(user = DB_USER, password = DB_PASS, database = DB_NAME)
+# def dbconnect() :
+#   import pymssql
+#   return pymssql.connect(user = DB_USER, password = DB_PASS, database = DB_NAME)
 
 
 #####################
 # DATABASE: Postgres
-#import psycopg2
-#db = psycopg2.connect(user = DB_USER, password = DB_PASS, database = DB_NAME)
+# def dbconnect() :
+#   import psycopg2
+#   db = psycopg2.connect(user = DB_USER, password = DB_PASS, database = DB_NAME)
 
 
 # END: server.py
@@ -64,5 +79,6 @@ COMMIT = 0
 #
 # If you need the silly server-wrapper, make sure these paths will do what you
 # need/want for your system.
-WINCMD = "c:\\python26\\python.exe c:\\mnet_server\\server.py"
+WINDIR = "c:\\mnet-py"
+WINCMD = "c:\\python26\\python.exe server.py"
 PIDFILE = "c:\\temp\\mnet-server.pid"

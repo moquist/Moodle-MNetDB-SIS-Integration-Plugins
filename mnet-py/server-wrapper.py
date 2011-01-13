@@ -65,6 +65,7 @@ if __name__ == "__main__" :
     print "This is only necessary for Windows."
     sys.exit(1)
   if trylock() :
+    os.chdir(config.WINDIR)
     os.system(config.WINCMD)
   else :
     print "no lock for me"
