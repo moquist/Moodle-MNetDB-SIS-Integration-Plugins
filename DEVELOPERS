@@ -73,11 +73,15 @@ List of steps that are covered below:
             * DB_NAME
             * DB_USER
             * DB_PASS
+            * LOGFILE_BASE
+            * STDERRFILE
         For example:
             ADDRESS = ("localhost", 60080)
             DB_NAME = 'mnetdemodb'
             DB_USER = 'mnetdemouser'
             DB_PASS = 'happymnet'
+            LOGFILE_BASE = "/tmp/mnettest.log"
+            STDERRFILE = "/tmp/mnettest.err"
     10.2) Still in config.py, uncomment the necessary lines for your database.
     10.3) Add your test moodle as a peer of your MNet server.
         $ python ShelveApp.py addpeer http://localhost/moodle/ moodle
